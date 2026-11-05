@@ -99,4 +99,60 @@ To verify SQLite support:
 python3 -c "import sqlite3; print(sqlite3.sqlite_version)"
 ```
 
-The SQLite command-line application is optional
+The SQLite command-line application is optional and is not required to run the Python scripts.
+
+### 4. Run the Project
+
+The repository includes a populated database, so recreating it is not necessary.
+
+To execute the SQL queries:
+
+```bash
+python3 queries.py
+```
+
+To display the featured property gallery:
+
+```bash
+python3 property_gallery.py
+```
+
+To validate the database:
+
+```bash
+python3 validate.py
+```
+
+The following scripts demonstrate database modifications:
+
+```bash
+python3 add_agent.py
+python3 record-sale.py
+```
+
+**Note:** These scripts may change database records. Use a backup database when testing modifications, and avoid rerunning initialization or population scripts against the provided database without reviewing their effects.
+
+## Data Integrity and Validation
+
+The project includes validation procedures to verify:
+
+- Database table record counts
+- Foreign key integrity
+- Overall SQLite database integrity
+- Consistency between listings and completed sales
+- Valid sale and listing dates
+- Absence of duplicate property addresses
+
+All six validation checks passed during development.
+
+## Property Gallery
+
+Eight featured properties include associated local image files, such as SpongeBob's pineapple house, Squidward's home, Patrick's rock, Sandy's treedome, Mr. Krabs' residence, and King Neptune's palace.
+
+Images are stored locally in the `images/` directory, with their relative paths referenced in the database.
+
+## Project Purpose
+
+This project applies core relational database concepts to a creative, fictional real estate scenario. It demonstrates how structured data can support property searches, transaction tracking, sales analysis, and database integrity while maintaining a consistent and engaging theme.
+
+*Bikini Bottom Realty — Where Every Home Is a Pineapple of Possibilities!* 🍍
