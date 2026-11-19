@@ -326,7 +326,7 @@ def main():
         fill="both",
         expand=True,
         padx=25,
-        pady=(0, 25),
+        pady=(0, 20),
     )
 
     columns = ("address", "city", "beds", "baths", "price")
@@ -360,8 +360,14 @@ def main():
 
     # Keep the PhotoImage alive while its preview is displayed.
     home_images = {}
-    preview = tk.Frame(search_tab, bg=WHITE)
-    preview.pack(fill="x", padx=25, pady=(0, 20))
+    preview = tk.Frame(search_tab, bg=WHITE, height=300)
+    preview.pack(
+        side="bottom",
+        fill="x",
+        padx=25,
+        pady=(0, 20)
+    )
+    preview.pack_propagate(False)
     preview_image = tk.Label(preview, bg=WHITE, fg=DEEP_BLUE)
     preview_image.pack(side="left", padx=15, pady=10)
     preview_text = tk.Label(preview, text="Select a home to see its photo.",
@@ -384,10 +390,16 @@ def main():
             try:
                 with Image.open(DB_PATH.parent / image_path) as source:
                     picture = source.copy()
-                picture.thumbnail((220, 130))
+                picture.thumbnail((400, 250), Image.Resampling.LANCZOS)
                 photo = ImageTk.PhotoImage(picture)
-                preview_image.configure(image=photo)
+                preview_image.configure(
+                    image=photo,
+                    text="",
+                    width=400,
+                    height=250
+                )
                 preview_image.image = photo
+                preview_image.update_idletasks()
                 return
             except (OSError, ValueError):
                 pass

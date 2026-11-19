@@ -393,4 +393,47 @@ else:
 
 print(f"\nMatching properties: {len(results)}")
 
+# ---------------------------------------------------------------------
+# additional query #4: identifies properties listed the longest.
+# Longest-listed query: the chosen date makes the demo reproducible.
+print("\nQUERY 11: LONGEST LISTED PROPERTIES")
+print("=" * 75)
+
+# Reference date for reproducible results
+as_of = "2026-11-19"
+
+cursor.execute("""
+SELECT p.address, p.city, l.list_price, l.listing_date,
+    CAST(julianday(?) - julianday(l.listing_date) AS INTEGER) AS days_listed
+FROM Property p
+JOIN Listing l ON p.property_id = l.property_id
+WHERE l.status = 'Available'
+AND p.property_type != 'Commercial'
+AND date(l.listing_date) <= date(?)
+ORDER BY days_listed DESC, l.listing_id;
+""", (as_of, as_of))
+
+for row in cursor.fetchall():
+    print(row)
+# ---------------------------------------------------------------------------
+# additional query #5: analyzes housing prices by city.
+print("\nQUERY 12: CITY MARKET ANALYSIS")
+print("=" * 75)
+
+cursor.execute("""
+SELECT p.city,
+    COUNT(*) AS available_homes,
+    ROUND(AVG(l.list_price),2) AS average_price,
+    MIN(l.list_price) AS lowest_price,
+    MAX(l.list_price) AS highest_price
+FROM Property p
+JOIN Listing l ON p.property_id = l.property_id
+WHERE l.status = 'Available'
+    AND p.property_type != 'Commercial'
+GROUP BY p.city
+ORDER BY average_price DESC;
+""")
+for row in cursor.fetchall():
+    print(row)
+
 conn.close()
